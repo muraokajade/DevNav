@@ -1,28 +1,59 @@
+// src/App.tsx
+
 import { useEffect, useState } from "react";
+import { fetchArticles } from "./api/articles";
+import type { Article } from "./types/articles";
 
 /**
- * DevNav Replayのトップ画面コンポーネント。
+ * アプリのメインコンポーネント。
  */
 function App() {
-  const [message, setMessage] = useState<string>("読み込み中...");
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   /**
-   * Spring BootのHello APIからメッセージを取得する。
+   * 初回表示時に記事一覧を取得する。
    */
   useEffect(() => {
-    const fetchHello = async () => {
-      const response = await fetch("http://localhost:8080/api/hello");
-      const text = await response.text();
-      setMessage(text);
+    const loadArticles = async () => {
+      try {
+        const articles = await fetchArticles();
+        setArticles(articles);
+      } catch (error) {
+        setErrorMessage("記事一覧の取得に失敗しました");
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchHello();
+    loadArticles();
   }, []);
 
+  if (loading) {
+    return <p>読み込み中...</p>;
+  }
+
+  if (errorMessage) {
+    return <p>{errorMessage}</p>;
+  }
+
   return (
-    <main style={{ padding: "40px", fontFamily: "sans-serif" }}>
-      <h1>DevNav Replay</h1>
-      <p>{message}</p>
+    <main>
+      <h1>DevNav Handbook</h1>
+
+      <section>
+        <h2>記事一覧</h2>
+
+        {articles.map((article) => (
+          <article key={article.id}>
+            <p>{article.category}</p>
+            <h3>{article.title}</h3>
+            <p>{article.summary}</p>
+            <p>slug: {article.slug}</p>
+          </article>
+        ))}
+      </section>
     </main>
   );
 }

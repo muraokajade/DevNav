@@ -18,4 +18,8 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findByFirebaseUid(String firebaseUid);
 
     Optional<AppUser> findByRole(String role);
+
+
+
+
 }
