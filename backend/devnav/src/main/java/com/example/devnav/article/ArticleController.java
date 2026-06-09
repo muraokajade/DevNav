@@ -53,4 +53,22 @@ public class ArticleController {
     public List<ArticleResponse> searchByTitle(@RequestParam String keyword) {
         return articleService.findByKeyword(keyword);
     }
+    /**
+     * 記事を更新する。
+     *
+     * @param id 記事ID
+     * @param request 記事更新リクエスト
+     * @return 更新後の記事レスポンス
+     */
+
+    @PutMapping("/articles/{id}")
+    public ArticleResponse update(@PathVariable Long id,
+                                  @RequestBody ArticleUpdateRequest request) {
+        return articleService.update(id,request);
+    }
+
+    @DeleteMapping("/articles/{id}")
+    public void delete(@PathVariable Long id) {
+        articleService.delete(id);
+    }
 }

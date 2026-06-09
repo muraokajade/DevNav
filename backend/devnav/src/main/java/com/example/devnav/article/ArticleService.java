@@ -58,6 +58,30 @@ public class ArticleService {
     }
 
     /**
+     * 記事を更新する。
+     *
+     * @param id 記事ID
+     * @param request 記事更新リクエスト
+     * @return 更新後の記事レスポンス
+     */
+    public ArticleResponse update(Long id, ArticleUpdateRequest request) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("記事が見つかりません"));
+
+        article.update(
+                request.getTitle(),
+                request.getSlug(),
+                request.getCategory(),
+                request.getSummary(),
+                request.getContent()
+        );
+
+        Article savedArticle = articleRepository.save(article);
+
+        return toResponse(savedArticle);
+    }
+
+    /**
      * 記事を新規作成する。
      *
      * @param request 記事作成リクエスト
@@ -114,6 +138,14 @@ public class ArticleService {
                 .stream()
                 .map(this::toResponse)
                 .toList();
+    }
+
+    public void delete(Long id) {
+        if(!articleRepository.existsById(id)) {
+            throw new RuntimeException("記事が見つかりません。");
+        }
+
+        articleRepository.deleteById(id);
     }
 
 

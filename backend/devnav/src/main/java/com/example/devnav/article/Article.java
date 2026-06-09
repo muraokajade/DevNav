@@ -85,4 +85,24 @@ public class Article {
         this.summary = summary;
         this.content = content;
     }
+
+    /**
+     * 記事情報を更新する。
+     *
+     * @param title 記事タイトル
+     * @param slug URLなどで利用する記事識別子
+     * @param category 記事カテゴリ
+     * @param summary 記事概要
+     * @param content 記事本文
+     */
+
+    public void update(String title, String slug, String category, String summary, String content) {
+        this.title = title;
+        this.slug = slug;
+        this.category = category;
+        this.summary = summary;
+        this.content = content;
+
+    }
+
 }
